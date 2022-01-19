@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/ervanhohoho/lsip-mock-be/accessor"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	accessor.Test()
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
