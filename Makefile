@@ -1,2 +1,2 @@
 build:
-	docker build --tag lsip-mock .
+	docker build --tag ghcr.io/ervanhohoho/lsip-mock .
