@@ -44,13 +44,21 @@ func (a *Accessor) UpdateHospital(entities []model.Hospital) bool {
 	//TODO Update Hospital here
 	var insertRes, updateRes *gorm.DB
 	insert, update := separateInsertAndUpdate(entities)
+	insertSuccess := true
+	updateSuccess := true
 	if len(insert) > 0 {
 		insertRes = a.db.Create(&insert)
+		if insertRes.Error != nil {
+			insertSuccess = false
+		}
 	}
 	if len(update) > 0 {
 		updateRes = a.db.Updates(&update)
+		if updateRes.Error != nil {
+			updateSuccess = false
+		}
 	}
-	if (insertRes == nil || insertRes.Error == nil) && (updateRes == nil || updateRes.Error == nil) {
+	if insertSuccess && updateSuccess {
 		return true
 	} else {
 		return false
