@@ -3,6 +3,7 @@ package accessor
 import (
 	"fmt"
 	"github.com/ervanhohoho/lsip-mock-be/model"
+	"github.com/ervanhohoho/lsip-mock-be/util"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -10,6 +11,7 @@ import (
 
 type Accessor struct {
 	db *gorm.DB
+	km util.KeyedMutex
 }
 
 func Initialize(host string, dbname string, user string, pw string) Accessor {
@@ -24,6 +26,7 @@ func Initialize(host string, dbname string, user string, pw string) Accessor {
 	}
 	return Accessor{
 		db: db,
+		km: util.Initialize(),
 	}
 }
 func (a *Accessor) GetHospitals() []model.Hospital {
@@ -36,8 +39,27 @@ func (a *Accessor) GetHospitals() []model.Hospital {
 		return []model.Hospital{}
 	}
 }
-func (a *Accessor) ReserveHospital() {
+func (a *Accessor) ReserveHospital(entity model.Hospital) (bool, string) {
 	//TODO Implement Locking to reserve hospital
+	var dbModel model.Hospital
+	lockName := fmt.Sprintf("HOSPITAL:%s", entity.Id)
+	success := false
+	errMsg := ""
+	unlock := a.km.Lock(lockName)
+	a.db.Find(&dbModel, entity.Id)
+	if dbModel.ReservedQuota < dbModel.Quota {
+		dbModel.ReservedQuota = dbModel.ReservedQuota + 1
+		result := a.db.Save(dbModel)
+		if result.Error != nil {
+			success = true
+		} else {
+			errMsg = result.Error.Error()
+		}
+	} else {
+		errMsg = "Kuota sudah habis"
+	}
+	unlock()
+	return success, errMsg
 }
 
 func (a *Accessor) UpdateHospital(entities []model.Hospital) bool {

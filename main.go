@@ -26,6 +26,19 @@ func setupHospitals(r *gin.Engine, accessor *accessor.Accessor) {
 			c.JSON(500, gin.H{"error": "Internal Server Error"})
 		}
 	})
+	r.POST("/hospitals/reserve", func(c *gin.Context) {
+		var request payload.ReserveHospitalPayload
+		if err := c.BindJSON(&request); err != nil {
+			// DO SOMETHING WITH THE ERROR
+			c.Error(err)
+		}
+		success, errMsg := accessor.ReserveHospital(request.Entity)
+		if success {
+			c.JSON(200, gin.H{"success": "Success update!"})
+		} else {
+			c.JSON(500, gin.H{"error": errMsg})
+		}
+	})
 }
 func main() {
 	accessor := accessor.Initialize("103.15.172.2", "primanet_lsip_mock", "primanet_lsip_user", "lsipmock2021")
