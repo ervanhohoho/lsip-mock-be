@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type accessor struct {
+type Accessor struct {
 	db *gorm.DB
 }
 
-func Initialize(host string, dbname string, user string, pw string) accessor {
+func Initialize(host string, dbname string, user string, pw string) Accessor {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, pw, host, dbname)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
@@ -22,11 +22,11 @@ func Initialize(host string, dbname string, user string, pw string) accessor {
 	if err != nil {
 		fmt.Println("Error Trying to connect to mysql")
 	}
-	return accessor{
+	return Accessor{
 		db: db,
 	}
 }
-func (a *accessor) GetHospitals() []model.Hospital {
+func (a *Accessor) GetHospitals() []model.Hospital {
 	var hospitals []model.Hospital
 	result := a.db.Find(&hospitals)
 	if result.Error == nil {
@@ -35,4 +35,37 @@ func (a *accessor) GetHospitals() []model.Hospital {
 		fmt.Printf("Error: %+v", result.Error)
 		return []model.Hospital{}
 	}
+}
+func (a *Accessor) ReserveHospital() {
+	//TODO Implement Locking to reserve hospital
+}
+
+func (a *Accessor) UpdateHospital(entities []model.Hospital) bool {
+	//TODO Update Hospital here
+	var insertRes, updateRes *gorm.DB
+	insert, update := separateInsertAndUpdate(entities)
+	if len(insert) > 0 {
+		insertRes = a.db.Create(&insert)
+	}
+	if len(update) > 0 {
+		updateRes = a.db.Updates(&update)
+	}
+	if (insertRes == nil || insertRes.Error == nil) && (updateRes == nil || updateRes.Error == nil) {
+		return true
+	} else {
+		return false
+	}
+}
+
+func separateInsertAndUpdate(entities []model.Hospital) (insert []model.Hospital, update []model.Hospital) {
+	update = []model.Hospital{}
+	insert = []model.Hospital{}
+	for _, element := range entities {
+		if element.Id != 0 {
+			update = append(update, element)
+		} else {
+			insert = append(insert, element)
+		}
+	}
+	return insert, update
 }
