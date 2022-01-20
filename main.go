@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	accessor.Test()
+	accessor.Initialize("103.15.172.2", "primanet_lsip_mock", "primanet_lsip_user", "lsipmock2021")
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
