@@ -53,9 +53,11 @@ func (a *Accessor) UpdateHospital(entities []model.Hospital) bool {
 		}
 	}
 	if len(update) > 0 {
-		updateRes = a.db.Updates(&update)
-		if updateRes.Error != nil {
-			updateSuccess = false
+		for _, element := range update {
+			updateRes = a.db.Save(&element)
+			if updateRes.Error != nil {
+				updateSuccess = false
+			}
 		}
 	}
 	if insertSuccess && updateSuccess {
