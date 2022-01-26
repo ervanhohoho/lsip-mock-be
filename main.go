@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/ervanhohoho/lsip-mock-be/accessor"
+	"github.com/ervanhohoho/lsip-mock-be/model"
 	"github.com/ervanhohoho/lsip-mock-be/payload"
 	"github.com/gin-gonic/gin"
 )
@@ -40,6 +41,29 @@ func setupHospitals(r *gin.Engine, accessor *accessor.Accessor) {
 		}
 	})
 }
+func setupUtils(r *gin.Engine, accessor *accessor.Accessor) {
+	r.GET("/access_times", func(c *gin.Context) {
+		obj, err := accessor.GetAccessTimes()
+		if *err != nil {
+			c.Error(*err)
+		} else {
+			c.JSON(200, gin.H{"data": obj})
+		}
+	})
+	r.POST("/access_times/update", func(c *gin.Context) {
+		var request model.AccessTime
+		if err := c.BindJSON(&request); err != nil {
+			// DO SOMETHING WITH THE ERROR
+			c.Error(err)
+		}
+		_, err := accessor.UpdateAccessTimes(request)
+		if *err != nil {
+			c.Error(*err)
+		} else {
+			c.JSON(200, gin.H{"success": "Success"})
+		}
+	})
+}
 func main() {
 	accessor := accessor.Initialize("103.15.172.2", "primanet_lsip_mock", "primanet_lsip_user", "lsipmock2021")
 	r := gin.Default()
@@ -49,6 +73,6 @@ func main() {
 		})
 	})
 	setupHospitals(r, &accessor)
-
+	setupUtils(r, &accessor)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

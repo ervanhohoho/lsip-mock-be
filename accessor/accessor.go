@@ -88,7 +88,19 @@ func (a *Accessor) UpdateHospital(entities []model.Hospital) bool {
 		return false
 	}
 }
-
+func (a *Accessor) GetAccessTimes() (model.AccessTime, *error) {
+	var ret model.AccessTime
+	result := a.db.Last(&ret)
+	return ret, &result.Error
+}
+func (a *Accessor) UpdateAccessTimes(time model.AccessTime) (model.AccessTime, *error) {
+	var ret model.AccessTime
+	a.db.Last(&ret)
+	ret.LoginTime = time.LoginTime
+	ret.RegisterTime = time.RegisterTime
+	result := a.db.Save(&ret)
+	return ret, &result.Error
+}
 func separateInsertAndUpdate(entities []model.Hospital) (insert []model.Hospital, update []model.Hospital) {
 	update = []model.Hospital{}
 	insert = []model.Hospital{}
