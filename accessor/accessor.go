@@ -50,7 +50,7 @@ func (a *Accessor) ReserveHospital(entity model.Hospital) (bool, string) {
 	if dbModel.ReservedQuota < dbModel.Quota {
 		dbModel.ReservedQuota = dbModel.ReservedQuota + 1
 		result := a.db.Save(dbModel)
-		if result.Error != nil {
+		if result.Error == nil {
 			success = true
 		} else {
 			errMsg = result.Error.Error()
