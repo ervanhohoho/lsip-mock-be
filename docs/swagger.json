@@ -16,12 +16,137 @@
                 "tags": [
                     "Access Time"
                 ],
-                "summary": "Update site's access times",
+                "summary": "Get site's access times",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.AccessTime"
+                        }
+                    }
+                }
+            }
+        },
+        "/access_times/update": {
+            "post": {
+                "description": "Update enabled register and login time for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Access Time"
+                ],
+                "summary": "Update site's access times",
+                "parameters": [
+                    {
+                        "description": "Update Access Time",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AccessTime"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CommonSuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/hospitals/": {
+            "get": {
+                "description": "Get hospital list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Get hospital list",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.HospitalListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/hospitals/reserve": {
+            "post": {
+                "description": "Reserve hospital",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Reserve hospital",
+                "parameters": [
+                    {
+                        "description": "Reserve Hospital",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Hospital"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CommonSuccessResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/hospitals/update": {
+            "post": {
+                "description": "Update hospital",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Update hospital",
+                "parameters": [
+                    {
+                        "description": "Update Hospital",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Hospital"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CommonSuccessResponse"
                         }
                     }
                 }
@@ -40,6 +165,42 @@
                 },
                 "registerTime": {
                     "type": "string"
+                }
+            }
+        },
+        "model.CommonSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Hospital": {
+            "type": "object",
+            "properties": {
+                "hospitalName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "quota": {
+                    "type": "integer"
+                },
+                "reservedQuota": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.HospitalListResponse": {
+            "type": "object",
+            "properties": {
+                "hospitals": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Hospital"
+                    }
                 }
             }
         }

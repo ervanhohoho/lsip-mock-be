@@ -6,3 +6,6 @@ type Hospital struct {
 	Quota         int
 	ReservedQuota int
 }
+type HospitalListResponse struct {
+	Hospitals []Hospital
+}

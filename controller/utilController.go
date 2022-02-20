@@ -16,17 +16,15 @@ func InitUtilController(r *gin.Engine, accessor *accessor.Accessor) {
 	r.GET("/access_times/update", utilController.UpdateAccessTimes)
 }
 
-// @BasePath /
-
 // GetAccessTimes godoc
-// @Summary Get site's access times
+// @Summary 	Get site's access times
 // @Schemes
 // @Description Get enabled register and login time for user
-// @Tags Access Time
-// @Accept json
-// @Produce json
-// @Success 200 {object} model.AccessTime
-// @Router /access_times/ [get]
+// @Tags 		Access Time
+// @Accept 		json
+// @Produce 	json
+// @Success 	200 {object} model.AccessTime
+// @Router 		/access_times/ [get]
 func (u *UtilController) GetAccessTimes(c *gin.Context) {
 	obj, err := u.accessor.GetAccessTimes()
 	if *err != nil {
@@ -37,15 +35,15 @@ func (u *UtilController) GetAccessTimes(c *gin.Context) {
 }
 
 // UpdateAccessTimes godoc
-// @Summary Update site's access times
+// @Summary 	Update site's access times
 // @Schemes
-// @Description Get enabled register and login time for user
-// @Tags Access Time
-// @Accept json
-// @Produce json
-// @
-// @Success 200 {string} success: Success
-// @Router /access_times/ [get]
+// @Description Update enabled register and login time for user
+// @Tags 		Access Time
+// @Accept 		json
+// @Produce 	json
+// @Param 		data 	body 	model.AccessTime 	true 	"Update Access Time"
+// @Success 	200 	object 	model.CommonSuccessResponse
+// @Router 		/access_times/update [post]
 func (u *UtilController) UpdateAccessTimes(c *gin.Context) {
 	var request model.AccessTime
 	if err := c.BindJSON(&request); err != nil {

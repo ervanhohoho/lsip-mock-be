@@ -8,6 +8,29 @@ definitions:
       registerTime:
         type: string
     type: object
+  model.CommonSuccessResponse:
+    properties:
+      success:
+        type: string
+    type: object
+  model.Hospital:
+    properties:
+      hospitalName:
+        type: string
+      id:
+        type: integer
+      quota:
+        type: integer
+      reservedQuota:
+        type: integer
+    type: object
+  model.HospitalListResponse:
+    properties:
+      hospitals:
+        items:
+          $ref: '#/definitions/model.Hospital'
+        type: array
+    type: object
 info:
   contact: {}
 paths:
@@ -22,8 +45,89 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/model.AccessTime'
+      summary: Get site's access times
+      tags:
+      - Access Time
+  /access_times/update:
+    post:
+      consumes:
+      - application/json
+      description: Update enabled register and login time for user
+      parameters:
+      - description: Update Access Time
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AccessTime'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CommonSuccessResponse'
       summary: Update site's access times
       tags:
       - Access Time
+  /hospitals/:
+    get:
+      consumes:
+      - application/json
+      description: Get hospital list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.HospitalListResponse'
+      summary: Get hospital list
+      tags:
+      - Hospital
+  /hospitals/reserve:
+    post:
+      consumes:
+      - application/json
+      description: Reserve hospital
+      parameters:
+      - description: Reserve Hospital
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.Hospital'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CommonSuccessResponse'
+      summary: Reserve hospital
+      tags:
+      - Hospital
+  /hospitals/update:
+    post:
+      consumes:
+      - application/json
+      description: Update hospital
+      parameters:
+      - description: Update Hospital
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.Hospital'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CommonSuccessResponse'
+      summary: Update hospital
+      tags:
+      - Hospital
 swagger: "2.0"
