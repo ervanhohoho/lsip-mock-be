@@ -1,11 +1,11 @@
 package model
 
 type Hospital struct {
-	Id            int `gorm:"primaryKey:autoIncrement"`
-	HospitalName  string
-	Quota         int
-	ReservedQuota int
+	Id            int    `gorm:"primaryKey:autoIncrement" json:"id"`
+	HospitalName  string `json:"hospitalName"`
+	Quota         int    `json:"quota"`
+	ReservedQuota int    `json:"reservedQuota"`
 }
 type HospitalListResponse struct {
-	Hospitals []Hospital
+	Hospitals []Hospital `json:"hospitals"`
 }
