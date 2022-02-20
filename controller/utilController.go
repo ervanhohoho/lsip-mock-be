@@ -16,6 +16,17 @@ func InitUtilController(r *gin.Engine, accessor *accessor.Accessor) {
 	r.GET("/access_times/update", utilController.UpdateAccessTimes)
 }
 
+// @BasePath /
+
+// GetAccessTimes godoc
+// @Summary Get site's access times
+// @Schemes
+// @Description Get enabled register and login time for user
+// @Tags Access Time
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.AccessTime
+// @Router /access_times/ [get]
 func (u *UtilController) GetAccessTimes(c *gin.Context) {
 	obj, err := u.accessor.GetAccessTimes()
 	if *err != nil {
@@ -24,6 +35,17 @@ func (u *UtilController) GetAccessTimes(c *gin.Context) {
 		c.JSON(200, gin.H{"data": obj})
 	}
 }
+
+// UpdateAccessTimes godoc
+// @Summary Update site's access times
+// @Schemes
+// @Description Get enabled register and login time for user
+// @Tags Access Time
+// @Accept json
+// @Produce json
+// @
+// @Success 200 {string} success: Success
+// @Router /access_times/ [get]
 func (u *UtilController) UpdateAccessTimes(c *gin.Context) {
 	var request model.AccessTime
 	if err := c.BindJSON(&request); err != nil {

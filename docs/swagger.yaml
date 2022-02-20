@@ -1,0 +1,29 @@
+definitions:
+  model.AccessTime:
+    properties:
+      id:
+        type: integer
+      loginTime:
+        type: string
+      registerTime:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /access_times/:
+    get:
+      consumes:
+      - application/json
+      description: Get enabled register and login time for user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Update site's access times
+      tags:
+      - Access Time
+swagger: "2.0"

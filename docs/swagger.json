@@ -1,0 +1,47 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/access_times/": {
+            "get": {
+                "description": "Get enabled register and login time for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Access Time"
+                ],
+                "summary": "Update site's access times",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.AccessTime": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "loginTime": {
+                    "type": "string"
+                },
+                "registerTime": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
