@@ -13,7 +13,7 @@ type UtilController struct {
 func InitUtilController(r *gin.Engine, accessor *accessor.Accessor) {
 	utilController := UtilController{accessor: accessor}
 	r.GET("/access_times", utilController.GetAccessTimes)
-	r.GET("/access_times/update", utilController.UpdateAccessTimes)
+	r.POST("/access_times/update", utilController.UpdateAccessTimes)
 }
 
 // GetAccessTimes godoc
