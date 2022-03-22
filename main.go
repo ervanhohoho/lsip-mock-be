@@ -7,9 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"os"
 )
 
 func main() {
+	port := os.Getenv("PORT")
 	accessor := accessor.Initialize("103.15.172.2", "primanet_lsip_mock", "primanet_lsip_user", "lsipmock2021")
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
@@ -21,5 +23,9 @@ func main() {
 	controller.InitUtilController(r, &accessor)
 	docs.SwaggerInfo_swagger.BasePath = "/"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	if port != "" {
+		r.Run(":" + port)
+	} else {
+		r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	}
 }
