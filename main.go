@@ -4,10 +4,12 @@ import (
 	"github.com/ervanhohoho/lsip-mock-be/accessor"
 	"github.com/ervanhohoho/lsip-mock-be/controller"
 	docs "github.com/ervanhohoho/lsip-mock-be/docs"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"os"
+	"time"
 )
 
 func main() {
@@ -23,6 +25,14 @@ func main() {
 	controller.InitUtilController(r, &accessor)
 	docs.SwaggerInfo_swagger.BasePath = "/"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://internship-kemenkes.vercel.app"},
+		AllowMethods:     []string{"POST", "GET", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	if port != "" {
 		r.Run(":" + port)
 	} else {
