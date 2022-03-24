@@ -14,7 +14,7 @@ type hospitalController struct {
 func InitHospitalController(r *gin.Engine, accessor *accessor.Accessor) {
 	controller := hospitalController{accessor: accessor}
 	h := r.Group("/hospitals")
-	h.GET("/", controller.GetHospitals)
+	h.GET("", controller.GetHospitals)
 	h.POST("/update", controller.UpdateHospital)
 	h.POST("/reserve", controller.ReserveHospital)
 }
